@@ -11,10 +11,10 @@
 Arrange structured UI nodes on a canvas. Connect Claude, Codex, Cursor, or
 opencode over MCP and they mutate the same document through typed transactions.
 
-- **Agent-native** — 35 MCP tools over the same engine the editor uses
+- **Agent-native** — 32 MCP tools over the same engine the editor uses
 - **Local-first** — one SQLite file, one loopback server, no accounts
 - **Versioned** — history, plus isolated drafts you can merge back
-- **One-way export** — HTML, React/TSX, JSON, PNG
+- **One-way export** — HTML, PNG, JPG, JSON
 
 ## Quick start
 
@@ -46,7 +46,6 @@ npx skills add https://github.com/DeepanshuMishraa/sheet/tree/main/skills/sheet-
 | `packages/canvas` | Document model, engine, merge, renderer, import, export |
 | `packages/editor` | Editor shell, panels, client sync |
 | `packages/shell` | Design browser, settings, integrations |
-| `packages/agent` | Shared canvas tool vocabulary for MCP and handoff |
 | `packages/rpc` | oRPC router, storage, history, handoff |
 | `packages/db` | Drizzle schema, `bun:sqlite` client, migrations |
 | `packages/realtime` | Wire protocol and in-process event bus |
