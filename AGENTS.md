@@ -113,13 +113,16 @@ Dependency-light canvas core. **Must never** import db, RPC, auth, web, drafts, 
 
 | Export | Role |
 |--------|------|
-| `@sheet/canvas/model` | `CanvasDocument`, node types, IDs, validation |
-| `@sheet/canvas/engine` | Typed transactions, indexes, undo/redo, preconditions, rebase, subscriptions |
-| `@sheet/canvas/merge` | Neutral left/right semantic merge |
-| `@sheet/canvas/react` | DOM/SVG renderer, surface, overlays, hooks |
-| `@sheet/canvas/motion` | Transitions, keyframe animations, easings, and the CSS they generate |
-| `@sheet/canvas/export` | One-way HTML, JSX, Tailwind, React/TSX, JSON, PNG compile |
-| `@sheet/canvas/import` | HTML/CSS snapshot conversion into validated structured nodes |
+| `@sheet/canvas/web-model` | `WebDocument`, node types, IDs, validation, and the typed transaction path (`applyWebTransaction`) |
+| `@sheet/canvas/legacy-model` | The legacy `CanvasDocument`, its node types, IDs, validation, and `applyNodePatch` |
+| `@sheet/canvas/web-merge` | Neutral left/right semantic merge |
+| `@sheet/canvas/web-react` | DOM/SVG renderer, surface, overlays, hooks |
+| `@sheet/canvas/web-css` | Authored CSS storage and serialization for the web document |
+| `@sheet/canvas/web-components` | Components and instances |
+| `@sheet/canvas/web-export` | One-way HTML compile — standalone document and a code snippet |
+| `@sheet/canvas/web-import` | HTML/CSS snapshot conversion into validated structured nodes |
+
+Transitions, keyframe animations, easings, and the CSS they generate live in `packages/canvas/src/motion.ts` for the legacy model; the package does not export them.
 
 Editor UI lives in `packages/editor` (branch panel, sync target, history, export, layers, properties). Keep branch/sync controllers outside the canvas package. The canvas package knows nothing about agents.
 
