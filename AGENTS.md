@@ -68,8 +68,8 @@ the client half of canvas sync.
 | Export | Role |
 |--------|------|
 | `@sheet/editor/app` | `CanvasApp` — the whole editor, mounted by the design routes |
-| `@sheet/editor/<name>` | Panels and dialogs: `editor`, `branches`, `history`, `export-panel`, `layers-panel`, `properties-panel`, `share-dialog`, `assets-panel`, `canvas-preview`, … |
-| `@sheet/editor/lib/canvas-client` | `CanvasSyncController` — optimistic apply, batching, rebase, realtime |
+| `@sheet/editor/<name>` | Panels and dialogs: `web-editor`, `web-history`, `web-preview`, `assets-panel`, `icon-panel`, `shader-panel`, `export-menu`, `comments`, `connect-agent`, `tab-bar`, `theme-panel`, `frame-presets-panel`, `inspector-controls`, … |
+| `@sheet/editor/lib/canvas-events` | `subscribeCanvasChanges` — live canvas and agent-activity events over SSE |
 | `@sheet/editor/lib/*` | Clipboard, HTML paste/import, code copy, capture, shortcuts, design list helpers |
 
 It depends on `@sheet/canvas`, `@sheet/ui`, `@sheet/rpc` (client), and
@@ -195,10 +195,14 @@ See `apps/desktop/README.md`.
 - Schema: `packages/db/src/schema.ts`
 - Migrations: `packages/db/drizzle/` (commit SQL **and** `meta/` snapshots)
 - Tables: `user` (one `local` row), `design`, `designDraft`, `designVersion`,
-  `canvasTransaction`, `asset`, `userPreferences`. Nothing else — no sharing,
-  no billing, no publishing.
+  `canvasTransaction`, `asset`, `userPreferences`, `designComment`. Nothing
+  else — no sharing, no billing, no publishing.
 
-Legacy helpers remain in `@sheet/db/canvas` and `@sheet/db/drafts` for rollback and expiring-link compatibility.
+Legacy payload columns stay on those tables (`design.shapes`, `design.pages`,
+`designDraft.base_shapes`, …) for rollback and expiring-link compatibility.
+`@sheet/db/canvas-transactions` prunes the transaction log,
+`@sheet/db/canvas-realtime` publishes events and presence, and
+`@sheet/db/design-access` resolves viewer roles.
 
 ---
 
