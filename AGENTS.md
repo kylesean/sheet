@@ -383,20 +383,24 @@ Keyframes move opacity and transform only. Both composite without touching
 layout, which is what keeps an animated canvas smooth and the exported CSS
 honest about what a browser can run.
 
-`@sheet/canvas/motion-css` generates the CSS, and both the editor renderer and
-the exporter read from it — a hover that lifts a card on the canvas is the same
-rule in the download. Every motion stylesheet ends with a
-`prefers-reduced-motion` block that turns it all off. The canvas surface takes a
-`motion` prop so the editor can stop motion while somebody is working, without
-the document knowing.
+**This is the legacy document model.** The web document has no first-class
+motion layer: a transition is a `transition` declaration and a hover look is a
+rule with a `:hover` selector, both plain CSS. Keyframes have no representation
+at all — `@keyframes` is one of the at-rules the web CSS subset rejects
+(`packages/canvas/src/web-css.ts`). The legacy pieces are still in the tree for
+migrating old designs.
 
-Presets carry the common asks: `@sheet/canvas/motion` has `fade-in`,
+`packages/canvas/src/motion.ts` generates the CSS (`transitionCss`,
+`keyframesCss`, `animationCss`), and both the editor renderer and the exporter
+read from it — a hover that lifts a card on the canvas is the same rule in the
+download.
+
+Presets carry the common asks: `packages/canvas/src/motion.ts` has `fade-in`,
 `fade-in-up`, `fade-in-down`, `slide-in-left`, `slide-in-right`, `scale-in`,
-`pulse`, `float`, `spin`; `@sheet/canvas/motion-presets` has hover looks —
-`lift`, `grow`, `shrink`, `fade`, `nudge-right` — each bringing its own
-transition. Agents reach them through `setAnimations` (define, by preset name or
-full keyframes) and `animateNodes` (apply, with an optional `stagger` so a list
-arrives one item at a time).
+`pulse`, `float`, `spin`; the hover looks — `lift`, `grow`, `shrink`, `fade`,
+`nudge-right` — each bringing its own transition, live in
+`packages/canvas/src/legacy-model.ts`. No MCP tool sets them: the tool surface
+is `apps/mcp/src/tools.json`.
 
 ### HTML/CSS import
 
