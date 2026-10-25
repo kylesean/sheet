@@ -222,7 +222,7 @@ impl LocalProfile {
         #[cfg(target_os = "macos")]
         let full_name = command_output("id", &["-F", &username]);
         #[cfg(not(target_os = "macos"))]
-        let full_name = None;
+        let full_name: Option<String> = None;
         #[cfg(target_os = "macos")]
         let picture = command_bytes(
             "dscl",
