@@ -28,7 +28,6 @@ packages/editor   Canvas editor shell, panels, client sync (`@sheet/editor`)
 packages/canvas   Canvas model, engine, merge, React surface, import, export
 packages/db       Drizzle schema, bun:sqlite client, migrations (`@sheet/db`)
 packages/rpc      oRPC `appRouter`, storage, history, handoff (`@sheet/rpc`)
-packages/agent    Shared canvas tools + layout repair for MCP (`@sheet/agent`)
 packages/realtime Realtime wire protocol plus the in-process local event bus (`@sheet/realtime`)
 ```
 
@@ -123,13 +122,6 @@ Dependency-light canvas core. **Must never** import db, RPC, auth, web, drafts, 
 | `@sheet/canvas/import` | HTML/CSS snapshot conversion into validated structured nodes |
 
 Editor UI lives in `packages/editor` (branch panel, sync target, history, export, layers, properties). Keep branch/sync controllers outside the canvas package. The canvas package knows nothing about agents.
-
-### `packages/agent` (`@sheet/agent`)
-
-Shared canvas mutation vocabulary for MCP (and handoff consumers), not models or chat:
-
-- `canvas-tools` — typed tool handlers over the same transaction path as the editor/RPC
-- `repair-layout` — layout repair utility used by `bun run canvas:repair-layout`
 
 ### `packages/rpc` (`appRouter` namespaces)
 
@@ -226,7 +218,6 @@ Root scripts (from repo root; env loaded from `.env` where needed):
 | `bun run db:migrate` | Apply pending migrations |
 | `bun run db:studio` | Drizzle Studio |
 | `bunx tsc --noEmit` | Strict TypeScript check |
-| `bun run canvas:repair-layout` | Layout repair utility (`packages/rpc`) |
 | `bun run assets:backfill-urls` | Rewrite `/api/asset/…` references to the public bucket URL (dry run without `--apply`) |
 
 MCP local: `bun run dev` (or `bun run dev:stdio`).
@@ -479,8 +470,7 @@ History uses Conventional Commits with scopes when useful:
 | Desktop routes | `apps/desktop/src/` |
 | Shared primitives, icons, `cn` | `packages/ui/src/` |
 | Client sync / runtime | `packages/editor/src/lib/canvas-*.ts` |
-| API procedures | One module per namespace in `packages/rpc/src/` (`canvas-procedures.ts`, `branches.ts`, `versions.ts`, …); `router.ts` only assembles them, and the local user lives in `procedures.ts` |
-| Shared MCP canvas tools / layout repair | `packages/agent/src/` |
+| API procedures | One module per namespace in `packages/rpc/src/` (`web-canvas-procedures.ts`, `branches.ts`, `versions.ts`, …); `router.ts` only assembles them, and the local user lives in `procedures.ts` |
 | MCP tools / transport | `packages/rpc/src/mcp-server.ts` / `apps/mcp/src/` |
 | Direct MCP execution backend | `apps/mcp/src/executor.ts` (local server in `local.ts`) |
 | Realtime transport, rooms, presence | Local event bus (`packages/realtime/src/local-bus.ts`, served as SSE by the local server) |
