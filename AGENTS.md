@@ -367,7 +367,7 @@ that trips during ordinary work is worse than none.
 - Designs, drafts, draft bases, and versions keep legacy payload columns for rollback and expiring-link compatibility alongside nullable Canvas documents and `canvasVersion`.
 - Element comments live in `design_comment`, beside the document and outside every `WebTransaction`: no undo, no export. The editor reads and writes them over oRPC (`comment.*`); agents use the MCP tools `listComments` and `resolveComment`.
 - `canvasTransaction` provides idempotency, stale-revision recovery, and audit. Server writes use compare-and-swap revisions; apply + log a batch atomically.
-- Browser: optimistic apply, queue unacked batches in IndexedDB, flush after ~250ms or before target change. Rebase independent fields; surface only same-field, move-vs-move, or edit-vs-delete conflicts.
+- The editor and the agent path apply a transaction through the same store function — `applyWebCanvasTransactionToStore` in `packages/rpc/src/web-canvas-procedures.ts`, called by both the oRPC procedure and the MCP tool. Undo and redo are local to the editor (`packages/editor/src/components/web-editor.tsx` keeps the transaction stack); there is no client-side rebase pass and no offline queue. A stale `expectedRevision` comes back as `applied: false` with `reason: stale`.
 - Legacy designs without a Canvas document are unsupported in the editor; there is no automatic first-open conversion flow.
 - The old public-link renderer (`element-frame.tsx`, an iframe/Babel/Tailwind
   per-element React-root pipeline) is gone. Do not bring that shape back.
