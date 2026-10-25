@@ -459,17 +459,17 @@ History uses Conventional Commits with scopes when useful:
 
 | Goal | Start here |
 |------|------------|
-| Node types, validation, document shape | `packages/canvas/src/model.ts` |
-| Transitions, animations, hover states | `packages/canvas/src/motion.ts` (+ `motion-css.ts`, `motion-presets.ts`) |
-| Transactions, undo, conflict preconditions | `packages/canvas/src/engine.ts` |
-| Draft merge semantics | `packages/canvas/src/merge.ts` (+ RPC draft procedures) |
+| Node types, validation, document shape | `packages/canvas/src/web-model.ts` |
+| Transitions, animations, hover states | `packages/canvas/src/motion.ts` (types, limits, and the `*Css` emitters) |
+| Transactions, undo, conflict preconditions | `packages/canvas/src/web-model.ts` (`applyWebTransaction`) + `packages/rpc/src/web-canvas-procedures.ts` |
+| Draft merge semantics | `packages/canvas/src/web-merge.ts` (+ `packages/rpc/src/branches.ts`) |
 | Editor chrome / tools / panels | `packages/editor/src/components/` |
 | Dashboard, settings, integrations | `packages/shell/src/components/` |
 | Which client this is, API and link origins | `packages/platform/src/runtime.ts` |
 | Desktop window, sidecar, API proxy | `apps/desktop/src-tauri/` |
 | Desktop routes | `apps/desktop/src/` |
 | Shared primitives, icons, `cn` | `packages/ui/src/` |
-| Client sync / runtime | `packages/editor/src/lib/canvas-*.ts` |
+| Client sync / runtime | `packages/rpc/src/client.ts` (oRPC client), `packages/editor/src/lib/canvas-events.ts` (agent activity over SSE) |
 | API procedures | One module per namespace in `packages/rpc/src/` (`web-canvas-procedures.ts`, `branches.ts`, `versions.ts`, …); `router.ts` only assembles them, and the local user lives in `procedures.ts` |
 | MCP tools / transport | `packages/rpc/src/mcp-server.ts` / `apps/mcp/src/` |
 | Direct MCP execution backend | `apps/mcp/src/executor.ts` (local server in `local.ts`) |
