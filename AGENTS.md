@@ -311,11 +311,11 @@ These are easy to break and expensive to fix. Treat them as hard rules.
 
 ### Shared MCP / handoff tool vocabulary
 
-Keep MCP tools and handoff consumers aligned on the shared `@sheet/agent` vocabulary:
+The editor, the MCP tools, and handoff consumers all mutate the document through one transaction vocabulary — the `WebOperation` union in `packages/canvas/src/web-model.ts`:
 
-`createPage` · `insertNodes` · `insertIcon` · `patchNodes` · `moveNodes` · `deleteNodes` · `readNode` · `readTree` · `searchNodes` · `searchIcons` · `createComponent` · `createInstance` · `setTokens` · `setAnimations` · `animateNodes` · `viewNode` · `viewPage` · `viewCanvas`
+`page.resize` · `page.reset` · `page.setName` · `page.setStage` · `node.insert` · `node.patch` · `node.move` · `node.delete` · `stylesheet.insert` · `stylesheet.patch` · `stylesheet.delete` · `rule.insert` · `rule.patch` · `rule.move` · `rule.delete` · `component.define` · `component.delete` · `instance.create` · `instance.delete` · `instance.setOverride` · `instance.clearOverride` · `instance.restore`
 
-Implementation: `packages/agent/src/canvas-tools.ts`, canonical MCP execution in `packages/rpc/src/mcp-server.ts`, and local transport in `apps/mcp/src/`.
+MCP tools wrap that vocabulary instead of redefining it: `applyWebTransaction` carries a batch of operations, and the generated manifest of the tool surface is `apps/mcp/src/tools.json` (run `bun run mcp:tools` after changing any tool). Canonical MCP execution is in `packages/rpc/src/mcp-server.ts`, and local transport in `apps/mcp/src/`.
 
 ### Realtime
 
